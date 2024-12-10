@@ -13,6 +13,15 @@ import Jdenticon from "react-jdenticon";
 import { Link } from "react-router-dom";
 
 import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -20,6 +29,8 @@ import {
 } from "@/components/ui/tooltip";
 import CreateTeamFormDialogComponent from "./CreateTeamFormDialogComponent";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import JoinTeamFormDialogComponent from "./JoinTeamFormDialogComponent";
+import MyTeam from "./MyTeam";
 
 const Teams = () => {
   const [teams, setTeams] = React.useState([]);
@@ -44,105 +55,101 @@ const Teams = () => {
   }, [socketServer]);
 
   return (
-    <Tabs className="" defaultValue="all-teams">
-      <TabsList className="bg-transparent flex flex-row justify-between items-center">
-        <div className="flex flex-row justify-start items-center">
-          <TabsTrigger
-            value="all-teams"
-            className="md:px-6 py-2 shadow-none border-b-2 border-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-          >
-            All Teams
-          </TabsTrigger>
-          <TabsTrigger
-            value="password"
-            className="px-6 py-2 shadow-none border-b-2 border-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-          >
-            My Team
-          </TabsTrigger>
+    <div className="space-y-8">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/teams">All Teams</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="flex flex-row justify-between items-center">
+        <div>
+          <h1 className="text-1xl font-bold">Teams</h1>
+          <p className="text-sm text-muted-foreground">
+            Here you can see all the teams in the world
+          </p>
         </div>
         <div className="flex flex-row justify-end items-center gap-2">
-          <Button
-            variant={"ghost"}
-            className="flex flex-row justify-start items-center gap-4"
-          >
-            <AddTeamIcon className="w-4 h-4" />
-            <span className="hidden md:block">Join Team</span>
-          </Button>
+          <JoinTeamFormDialogComponent />
           <CreateTeamFormDialogComponent />
         </div>
-      </TabsList>
-      <div className="py-6 h-full">
-        <TabsContent value="all-teams" className="h-full">
-          <ScrollArea>
-            <div className="space-y-4 h-full">
-              {teams && teams.length > 0 ? (
-                teams.map((team: any) => (
-                  <div
-                    key={team.teamName}
-                    className="grid grid-cols-[auto_1fr_auto_.5fr] md:grid-cols-[auto_1fr_.3fr_auto_.5fr] gap-2"
-                  >
-                    <div className="rounded-full">
-                      <Jdenticon size="40" value={team.teamName} />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-semibold">{team.teamName}</span>
-                      <small className="text-xs uppercase text-muted-foreground font-medium">
-                        {team.teamCountry}
-                      </small>
-                    </div>
-                    <div className="flex-col hidden md:flex">
-                      <span className="font-semibold">
-                        {team.teamMembers && team.teamMembers.length} player{" "}
-                        {team.teamMembers && team.teamMembers.length > 1
-                          ? "s"
-                          : ""}
-                      </span>
-                      <small className="text-xs uppercase text-muted-foreground font-medium">
-                        members
-                      </small>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-semibold">{team.teamPoints}</span>
-                      <small className="text-xs uppercase text-muted-foreground font-medium text-nowrap">
-                        total points
-                      </small>
-                    </div>
-                    <div className="flex justify-end items-center">
-                      <TooltipProvider delayDuration={0}>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              to={`/teams/overview/${team.teamId}`}
-                              className={cn(
-                                buttonVariants({ variant: "ghost" }),
-                                "rounded-full w-10 h-10"
-                              )}
-                            >
-                              <ArrowRight01Icon className="w-4 h-4" />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" align="center">
-                            <p>View Team</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="flex flex-col justify-center items-center h-fit">
-                  <Flag01Icon className="w-8 h-8 text-red-500 mb-2" />
-                  <span className="text-muted-foreground text-sm">
-                    There's no teams yet.
-                  </span>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
-        </TabsContent>
-        <TabsContent value="password">なに</TabsContent>
       </div>
-    </Tabs>
+      <ScrollArea>
+        <div className="space-y-4 h-full">
+          {teams && teams.length > 0 ? (
+            teams.map((team: any) => (
+              <div
+                key={team.teamName}
+                className="grid grid-cols-[auto_1fr_auto_.5fr] md:grid-cols-[auto_auto_1fr_.3fr_auto_.5fr] gap-2"
+              >
+                <div className="flex flex-col justify-center items-center">
+                  <img
+                    src={`/rankings/${team.teamRanking}.svg`}
+                    alt=""
+                    className="h-12 w-12"
+                    title={team.teamRanking.replace("_", " ").toUpperCase()}
+                  />
+                </div>
+                <div className="rounded-full flex-shrink-0 flex justify-center items-center w-12">
+                  <Jdenticon size="40" value={team.teamName} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold">{team.teamName}</span>
+                  <small className="text-xs text-muted-foreground font-medium">
+                    {team.teamCountry}
+                  </small>
+                </div>
+                <div className="flex-col hidden md:flex">
+                  <span className="font-semibold">
+                    {team.teamMembers && team.teamMembers.length} player{" "}
+                    {team.teamMembers && team.teamMembers.length > 1 ? "s" : ""}
+                  </span>
+                  <small className="text-xs uppercase text-muted-foreground font-medium">
+                    members
+                  </small>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold">{team.teamPoints}</span>
+                  <small className="text-xs uppercase text-muted-foreground font-medium text-nowrap">
+                    total points
+                  </small>
+                </div>
+                <div className="flex justify-end items-center">
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link
+                          to={`/teams/overview/${team.teamId}`}
+                          className={cn(
+                            buttonVariants({ variant: "ghost" }),
+                            "rounded-full w-10 h-10"
+                          )}
+                        >
+                          <ArrowRight01Icon className="w-4 h-4" />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" align="center">
+                        <p className="text-sm">View Team</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col justify-center items-center h-fit">
+              <Flag01Icon className="w-8 h-8 text-red-500 mb-2" />
+              <span className="text-muted-foreground text-sm">
+                There's no teams yet.
+              </span>
+            </div>
+          )}
+        </div>
+      </ScrollArea>
+    </div>
   );
 };
 
