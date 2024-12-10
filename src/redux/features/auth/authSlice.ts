@@ -5,12 +5,14 @@ export interface authenticationState {
   token: string;
   email: string;
   userName: string;
+  userId: string;
 }
 
 export const initialState: authenticationState = {
   token: "",
   email: "",
   userName: "",
+  userId: "",
 };
 
 export const authenticationSlice = createSlice({
@@ -19,17 +21,19 @@ export const authenticationSlice = createSlice({
   reducers: {
     authenticate: (
       state,
-      action: PayloadAction<{ token: string; email: string; userName: string }>
+      action: PayloadAction<{ token: string; email: string; userName: string; userId: string }>
     ) => {
-      const { token, email, userName } = action.payload;
+      const { token, email, userName, userId } = action.payload;
       state.token = token;
       state.email = email;
       state.userName = userName;
+      state.userId = userId;
     },
     logout: (state) => {
       state.token = "";
       state.email = "";
       state.userName = "";
+      state.userId = "";
     },
   },
 });
