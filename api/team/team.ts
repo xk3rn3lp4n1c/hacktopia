@@ -37,6 +37,34 @@ export const CreateTeam = async ({
   }
 };
 
+export const JoinTeam = async ({
+  teamId = "",
+  userId = "",
+  token = "", // Add token as a parameter
+}: {
+  teamId: string;
+  userId: string;
+  token: string; // Add token to the type definition
+}) => {
+  try {
+    const response = await axios.post(
+      `${APP_API_ENDPOINT_URL}/api/v1/team/join`,
+      {
+        teamId,
+        userId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use the passed token
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const ChkTeam = async ({
   teamName = "",
   token = "",
@@ -74,6 +102,7 @@ export const ListTeams = async ({ token = "" }: { token: string }) => {
     throw error;
   }
 };
+
 export const GetTeamDetails = async ({
   teamId = "",
   token = "",
@@ -84,6 +113,29 @@ export const GetTeamDetails = async ({
   try {
     const response = await axios.get(
       `${APP_API_ENDPOINT_URL}/api/v1/team/teamDetails/?teamId=${teamId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in GetTeamDetails:", error); // Debugging
+    throw error;
+  }
+};
+
+export const GetMyTeamDetails = async ({
+  userId = "",
+  token = "",
+}: {
+  userId: string;
+  token: string;
+}) => {
+  try {
+    const response = await axios.get(
+      `${APP_API_ENDPOINT_URL}/api/v1/team/myTeam/?userId=${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
