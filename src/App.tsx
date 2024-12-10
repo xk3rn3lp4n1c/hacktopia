@@ -16,6 +16,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import TeamLayout from "./pages/team/TeamLayout";
 import Teams from "./pages/team/Teams";
 import TeamDetail from "./pages/team/TeamDetail";
+import MyTeam from "./pages/team/MyTeam";
 
 export default function App() {
   const [cookies, _] = useCookies(["token"]);
@@ -56,6 +57,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" />} />
             <Route index element={<Index />} />
             <Route path="/" element={<Index />} />
+            <Route path="my-team" element={<MyTeam />} />
             <Route
               path="teams"
               element={
