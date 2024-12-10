@@ -65,6 +65,7 @@ export default function Login({ setAuthenticated }: { setAuthenticated: any }) {
               token: res.token,
               email: decodedToken.email,
               userName: decodedToken.userName,
+              userId: decodedToken.userId,
             })
           );
           setAuthenticated(true);
