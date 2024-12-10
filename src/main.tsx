@@ -10,7 +10,7 @@ import { ThemeProvider } from "./components/ui/theme-provider.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ReduxProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <CookiesProvider defaultSetOptions={{ path: "/" }}>
           <BrowserRouter>
             <App />
