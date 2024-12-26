@@ -1,6 +1,6 @@
 "use client";
 
-import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import AuthLayout from "./pages/auth/AuthLayout";
 import Login from "./pages/auth/Login";
 import CreateAccount from "./pages/auth/CreateAccount";
@@ -13,6 +13,9 @@ import AuthCallback from "./pages/auth/Callback";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyOTP from "./pages/auth/VerifyOTP";
 import ResetPassword from "./pages/auth/ResetPassword";
+import MyTeam from "./pages/team/MyTeam";
+import TeamLayout from "./pages/team/TeamLayout";
+import Teams from "./pages/team/Teams";
 
 export default function App() {
   const [cookies, _] = useCookies(["token"]);
@@ -20,14 +23,11 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const checkAuth = () => {
       if (cookies.token && cookies.token === token) {
         setAuthenticated(true);
         setIsLoading(false);
-        navigate("/");
       } else {
         setAuthenticated(false);
         setIsLoading(false);
@@ -53,8 +53,20 @@ export default function App() {
               </AppLayout>
             }
           >
-            <Route index element={<Index />} />
             <Route path="*" element={<Navigate to="/" />} />
+            <Route index element={<Index />} />
+            <Route path="/" element={<Index />} />
+            <Route
+              path="teams"
+              element={
+                <TeamLayout>
+                  <Outlet />
+                </TeamLayout>
+              }
+            >
+              <Route index element={<Teams />} />
+              <Route path=":teamId" element={<MyTeam />} />
+            </Route>
           </Route>
         ) : (
           <Route
@@ -78,18 +90,9 @@ export default function App() {
               path="register"
               element={<CreateAccount setAuthenticated={setAuthenticated} />}
             />
-            <Route
-              path="forgot-password"
-              element={<ForgotPassword />}
-            />
-            <Route
-              path="verify-otp"
-              element={<VerifyOTP />}
-            />
-             <Route
-              path="reset-password"
-              element={<ResetPassword />}
-            />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="verify-otp" element={<VerifyOTP />} />
+            <Route path="reset-password" element={<ResetPassword />} />
             <Route path="*" element={<Navigate to="/login" />} />
           </Route>
         )}
