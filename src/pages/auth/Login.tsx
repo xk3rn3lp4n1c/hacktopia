@@ -97,7 +97,7 @@ export default function Login({ setAuthenticated }: { setAuthenticated: any }) {
     <div className="md:px-20 grid place-items-center">
       <div className="grid place-items-center space-y-4">
         <div className="grid place-items-center">
-          <img src={APP_LOGO} alt="" className="h-10" />
+          <img src={APP_LOGO} alt="" className="h-8 md:h-10" />
           <span className="text-muted-foreground text-sm mt-4">{APP_DESC}</span>
         </div>
         <div className="">
