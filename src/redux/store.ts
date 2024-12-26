@@ -16,6 +16,7 @@ import {
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import storage from "./storage";
 import { authenticationSlice } from "./features/auth/authSlice";
+import { teamSlice } from "./features/team/teamSlice";
 
 const persistConfig = {
   key: "root",
@@ -25,6 +26,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authenticationSlice.reducer,
+  team: teamSlice.reducer,
 });
 
 const persistedReducer = persistReducer<ReturnType<typeof rootReducer>, any>(
