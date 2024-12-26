@@ -1,0 +1,1 @@
+export const APP_API_ENDPOINT_URL = "https://localhost:5000";
