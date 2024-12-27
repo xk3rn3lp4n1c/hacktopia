@@ -71,3 +71,25 @@ export const ListTeams = async ({ token = "" }: { token: string }) => {
     throw error;
   }
 };
+export const GetTeamDetails = async ({
+  teamId = "",
+  token = "",
+}: {
+  teamId: string;
+  token: string;
+}) => {
+  try {
+    const response = await axios.get(
+      `${APP_API_ENDPOINT_URL}/api/v1/team/teamDetails/?teamId=${teamId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in GetTeamDetails:", error); // Debugging
+    throw error;
+  }
+};
