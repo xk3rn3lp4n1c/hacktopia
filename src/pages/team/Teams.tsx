@@ -245,25 +245,38 @@ const Teams = () => {
         </TabsList>
         <div className="py-6">
           <TabsContent value="account">
-            {teams.map((team: any) => (
-              <div key={team.teamName} className="grid grid-cols-2 gap-2">
-                <div className="flex flex-col">
-                  <span className="font-semibold">{team.teamName}</span>
-                  <small className="text-xs uppercase text-muted-foreground font-medium">
-                    team name
-                  </small>
+            <div className="space-y-4">
+              {teams.map((team: any) => (
+                <div
+                  key={team.teamName}
+                  className="grid grid-cols-[1fr_.3fr_auto] gap-2"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{team.teamName}</span>
+                    <small className="text-xs uppercase text-muted-foreground font-medium">
+                      team name
+                    </small>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-semibold">
+                      {team.teamMembers && team.teamMembers.length} player{" "}
+                      {team.teamMembers && team.teamMembers.length > 1
+                        ? "s"
+                        : ""}
+                    </span>
+                    <small className="text-xs uppercase text-muted-foreground font-medium">
+                      members
+                    </small>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{team.teamPoints}</span>
+                    <small className="text-xs uppercase text-muted-foreground font-medium">
+                      total points
+                    </small>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold">
-                    {team.teamMembers && team.teamMembers.length} hacker{" "}
-                    {team.teamMembers && team.teamMembers.length > 1 ? "s" : ""}
-                  </span>
-                  <small className="text-xs uppercase text-muted-foreground font-medium">
-                    members
-                  </small>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </TabsContent>
           <TabsContent value="password">なに</TabsContent>
         </div>
