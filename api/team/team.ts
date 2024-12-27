@@ -55,3 +55,19 @@ export const ChkTeam = async ({
     throw error;
   }
 };
+
+export const ListTeams = async ({ token = "" }: { token: string }) => {
+  try {
+    const response = await axios.get(
+      `${APP_API_ENDPOINT_URL}/api/v1/team/list`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
