@@ -1,13 +1,12 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { APP_LOGO } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import {
   Flag01Icon,
   Logout03Icon,
-  Menu03Icon,
   RankingIcon,
   UserGroupIcon,
   UserIcon,
@@ -57,7 +56,7 @@ const Navbar = () => {
   const [cookies, _] = useCookies(["token"]);
   const appDispatch = useAppDispatch();
 
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [_open, setOpen] = React.useState<boolean>(false);
 
   const sessionSignOut = async (t: string) => {
     try {

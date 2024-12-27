@@ -1,6 +1,10 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AddCircleHalfDotIcon, AddTeamIcon } from "hugeicons-react";
+import {
+  AddCircleHalfDotIcon,
+  AddTeamIcon,
+  ArrowRight01Icon,
+} from "hugeicons-react";
 
 import {
   Dialog,
@@ -14,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -30,7 +34,16 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import React, { useEffect } from "react";
 import { debounce } from "lodash";
 import { setTeam } from "@/redux/features/team/teamSlice";
-import { socketServer } from "@/lib/utils";
+import { cn, socketServer } from "@/lib/utils";
+import Jdenticon from "react-jdenticon";
+import { Link } from "react-router-dom";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const formSchema = z.object({
   teamName: z.string().min(2, {
@@ -48,6 +61,8 @@ const Teams = () => {
   const { userName, token } = useAppSelector((state) => state.auth);
   const [chkTeam, setChkTeam] = React.useState(false);
   const [teams, setTeams] = React.useState([]);
+
+  const [open, setOpen] = React.useState(false);
 
   const appDispatch = useAppDispatch();
 
@@ -70,10 +85,12 @@ const Teams = () => {
       .then((res) => {
         if (res.code === "TEAM_CREATED") {
           console.log(res);
-          appDispatch(setTeam(res.teamName));
+          appDispatch(setTeam(res.team.teamName));
           setChkTeam(false);
 
           socketServer.emit("allTeams");
+
+          setOpen(false);
         }
       })
       .catch((error) => {
@@ -139,7 +156,7 @@ const Teams = () => {
   }, [socketServer]);
 
   return (
-    <div className="py-4">
+    <div>
       <Tabs defaultValue="account">
         <TabsList className="bg-transparent flex flex-row justify-between items-center">
           <div className="flex flex-row justify-start items-center">
@@ -164,7 +181,7 @@ const Teams = () => {
               <AddTeamIcon className="w-4 h-4" />
               Join Team
             </Button>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button
                   variant={"default"}
@@ -249,8 +266,11 @@ const Teams = () => {
               {teams.map((team: any) => (
                 <div
                   key={team.teamName}
-                  className="grid grid-cols-[1fr_.3fr_auto] gap-2"
+                  className="grid grid-cols-[auto_1fr_.3fr_auto_.5fr] gap-2"
                 >
+                  <div>
+                    <Jdenticon size="40" value={team.teamName} />
+                  </div>
                   <div className="flex flex-col">
                     <span className="font-semibold">{team.teamName}</span>
                     <small className="text-xs uppercase text-muted-foreground font-medium">
@@ -273,6 +293,26 @@ const Teams = () => {
                     <small className="text-xs uppercase text-muted-foreground font-medium">
                       total points
                     </small>
+                  </div>
+                  <div className="flex justify-end items-center">
+                    <TooltipProvider delayDuration={0}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Link
+                            to={`/teams/${team.teamId}`}
+                            className={cn(
+                              buttonVariants({ variant: "ghost" }),
+                              "rounded-full w-10 h-10"
+                            )}
+                          >
+                            <ArrowRight01Icon className="w-4 h-4" />
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" align="center">
+                          <p>View Team</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 </div>
               ))}

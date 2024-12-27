@@ -13,9 +13,9 @@ import AuthCallback from "./pages/auth/Callback";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyOTP from "./pages/auth/VerifyOTP";
 import ResetPassword from "./pages/auth/ResetPassword";
-import MyTeam from "./pages/team/MyTeam";
 import TeamLayout from "./pages/team/TeamLayout";
 import Teams from "./pages/team/Teams";
+import TeamDetail from "./pages/team/TeamDetail";
 
 export default function App() {
   const [cookies, _] = useCookies(["token"]);
@@ -65,7 +65,7 @@ export default function App() {
               }
             >
               <Route index element={<Teams />} />
-              <Route path=":teamId" element={<MyTeam />} />
+              <Route path=":teamId" element={<TeamDetail />} />
             </Route>
           </Route>
         ) : (
