@@ -6,11 +6,15 @@ import axios from "axios";
 export const CreateTeam = async ({
   teamName = "",
   teamCode = "",
+  teamMotto = "",
+  teamCountry = "",
   teamCaptain = "",
   token = "", // Add token as a parameter
 }: {
   teamName: string;
   teamCode: string;
+  teamMotto: string;
+  teamCountry: string;
   teamCaptain: string;
   token: string; // Add token to the type definition
 }) => {
@@ -20,6 +24,8 @@ export const CreateTeam = async ({
       {
         teamName,
         teamCode,
+        teamMotto,
+        teamCountry,
         teamCaptain,
       },
       {
