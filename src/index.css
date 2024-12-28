@@ -97,3 +97,8 @@
   scroll-behavior: smooth !important;
   user-select: none !important;
 }
+
+body {
+  width: 100vw !important;
+  height: 100vh !important;
+}
