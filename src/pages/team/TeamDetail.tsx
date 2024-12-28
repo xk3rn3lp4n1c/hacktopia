@@ -51,6 +51,8 @@ interface TeamDetails {
   teamMotto: string;
   teamCountry: string;
   teamPoints: number;
+  teamRanking: string;
+  teamCapturedFlags: number;
   createdAt: string;
   updatedAt: string;
   teamMembers: TeamMember[];
@@ -70,6 +72,8 @@ const TeamDetail = () => {
     teamMotto: "",
     teamCountry: "",
     teamPoints: 0,
+    teamRanking: "",
+    teamCapturedFlags: 0,
     createdAt: "",
     updatedAt: "",
     teamMembers: [],
@@ -104,13 +108,7 @@ const TeamDetail = () => {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/teams">
-                  {teamDetails.teamName ? (
-                    "All Teams"
-                  ) : (
-                    <Skeleton className="h-4 w-12" />
-                  )}
-                </Link>
+                <Link to="/teams">All Teams</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -131,59 +129,78 @@ const TeamDetail = () => {
               ) : (
                 <Skeleton className="h-20 w-20" />
               )}
-              {currentTeamName === "" && (
-                <Button variant="ghost">
-                  <Link03Icon size="16" />
-                  Request Join
-                </Button>
-              )}
+              <div>
+                {teamDetails.teamRanking ? (
+                  <img
+                    src={`/rankings/${teamDetails.teamRanking}.svg`}
+                    alt=""
+                    className="h-20 w-20"
+                  />
+                ) : (
+                  <Skeleton className="h-20 w-20 rounded-full" />
+                )}
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold flex flex-row justify-start items-center gap-4">
-                {teamDetails.teamName || <Skeleton className="h-8 w-32" />}{" "}
-                {teamDetails.teamName ? (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge variant={"default"} className="">
-                        {getData().map((country) =>
-                          country.name === teamDetails.teamCountry
-                            ? country.code
-                            : null
-                        )}
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" align="start">
-                      <span className="text-xs flex flex-row justify-start items-center gap-2">
-                        <Location01Icon size="14" />
-                        {teamDetails.teamCountry}
-                      </span>
-                    </TooltipContent>
-                  </Tooltip>
-                ) : (
-                  <Skeleton className="h-5 w-7" />
+            <div className="space-y-4">
+              <div className="flex flex-row justify-between items-center">
+                <div>
+                  <h1 className="text-2xl font-bold flex flex-row justify-start items-center gap-4">
+                    {teamDetails.teamName || <Skeleton className="h-8 w-32" />}{" "}
+                    {teamDetails.teamName ? (
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Badge variant={"default"} className="">
+                            {getData().map((country) =>
+                              country.name === teamDetails.teamCountry
+                                ? country.code
+                                : null
+                            )}
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" align="start">
+                          <span className="text-xs flex flex-row justify-start items-center gap-2">
+                            <Location01Icon size="14" />
+                            {teamDetails.teamCountry}
+                          </span>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <Skeleton className="h-5 w-7" />
+                    )}
+                  </h1>
+                  <span className="text-muted-foreground text-sm">
+                    {teamDetails.teamMotto ? (
+                      teamDetails.teamMotto
+                    ) : (
+                      <div className="space-y-2 mt-2">
+                        <Skeleton className="w-full h-4" />
+                        <Skeleton className="w-[50%] h-4" />
+                      </div>
+                    )}
+                  </span>
+                </div>
+                {teamDetails && currentTeamName === "" && (
+                  <Button variant="ghost">
+                    <Link03Icon size="16" />
+                    Request Join
+                  </Button>
                 )}
-              </h1>
-              <span className="text-muted-foreground text-sm">
-                {teamDetails.teamMotto ? (
-                  teamDetails.teamMotto
-                ) : (
-                  <div className="space-y-2 mt-2">
-                    <Skeleton className="w-full h-4" />
-                    <Skeleton className="w-[50%] h-4" />
-                  </div>
-                )}
-              </span>
+              </div>
               <Separator className="my-4 bg-primary/5" />
               <div>
-                <div className="flex flex-row justify-start items-center gap-2 mt-2">
+                <div className="flex flex-row justify-between items-center gap-2 mt-2">
                   <h2 className="text-muted-foreground text-sm flex justify-start items-center gap-2">
-                    <CrownIcon size="16" />
+                    <CrownIcon className="text-yellow-600" size="16" />
                     {teamDetails.teamCaptain ? (
                       <p>{teamDetails.teamCaptain}</p>
                     ) : (
-                      <Skeleton className="w-full h-4" />
+                      <Skeleton className="w-24 h-4" />
                     )}
                   </h2>
+                  <span className="text-muted-foreground text-sm">
+                    {teamDetails.teamCapturedFlags} Captured -{" "}
+                    {teamDetails.teamPoints} Points
+                  </span>
                 </div>
               </div>
             </div>
