@@ -16,7 +16,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { AddCircleHalfDotIcon } from "hugeicons-react";
+import {
+  AddCircleHalfDotIcon,
+  ArrowUp01Icon,
+  Tick02Icon,
+} from "hugeicons-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,9 +28,27 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ChkTeam, CreateTeam } from "../../../api/team/team";
 import { setTeam } from "@/redux/features/team/teamSlice";
-import { socketServer } from "@/lib/utils";
+import { cn, socketServer } from "@/lib/utils";
 import { debounce } from "lodash";
 import { Textarea } from "@/components/ui/textarea";
+
+import { getData } from "country-list";
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const formSchema = z.object({
   teamName: z.string().min(2, {
@@ -48,6 +70,7 @@ const formSchema = z.object({
 
 const CreateTeamFormDialogComponent = () => {
   const [open, setOpen] = useState(false);
+  const [hasCountryPicked, setHasCountryPicked] = useState(false);
 
   const { userName, token } = useAppSelector((state) => state.auth);
   const [chkTeam, setChkTeam] = useState(false);
@@ -169,10 +192,89 @@ const CreateTeamFormDialogComponent = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="teamCountry"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Team Country</FormLabel>
+                      <br />
+                      <Popover
+                        onOpenChange={setHasCountryPicked}
+                        open={hasCountryPicked ? true : false}
+                      >
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "justify-between p-5",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? getData().find(
+                                    (country) => country.name === field.value
+                                  )?.code
+                                : "Country"}
+                              <ArrowUp01Icon className="opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className="p-0"
+                          side="bottom"
+                          align="end"
+                        >
+                          <Command>
+                            <CommandInput
+                              placeholder="Search country..."
+                              className="h-9"
+                            />
+                            <CommandList>
+                              <CommandEmpty>Country not found.</CommandEmpty>
+                              <CommandGroup>
+                                <ScrollArea className="max-h-[200px]">
+                                  {getData().map((country) => (
+                                    <CommandItem
+                                      value={country.name}
+                                      key={country.name}
+                                      onSelect={() => {
+                                        console.log(country.name);
+                                        form.setValue(
+                                          "teamCountry",
+                                          country.name
+                                        );
+                                        setHasCountryPicked(true);
+                                      }}
+                                    >
+                                      <span className="text-muted-foreground">{country.code}</span> - {" "}
+                                      {country.name}
+                                      <Tick02Icon
+                                        className={cn(
+                                          "ml-auto",
+                                          country.code === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                    </CommandItem>
+                                  ))}
+                                </ScrollArea>
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
               <FormField
                 control={form.control}
-                name="teamName"
+                name="teamMotto"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Team name</FormLabel>
@@ -181,7 +283,7 @@ const CreateTeamFormDialogComponent = () => {
                         {...field}
                         className="w-full"
                         placeholder="Enter team motto"
-                        maxLength={15}
+                        maxLength={200}
                       />
                     </FormControl>
                     <FormDescription>
