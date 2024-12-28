@@ -12,7 +12,7 @@ import {
   UserIcon,
   UserMultipleIcon,
 } from "hugeicons-react";
-import React from "react";
+import React, { Ref } from "react";
 import { Link } from "react-router-dom";
 import Jdenticon from "react-jdenticon";
 
@@ -27,6 +27,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useCookies } from "react-cookie";
 import { logout } from "@/redux/features/auth/authSlice";
+import { clearTeam } from "@/redux/features/team/teamSlice";
 
 interface Links {
   title: string;
@@ -51,7 +52,7 @@ const links: Links[] = [
   },
 ];
 
-const Navbar = () => {
+const Navbar = React.forwardRef<HTMLElement>((props, ref) => {
   const { userName, email, token } = useAppSelector((state) => state.auth);
   const [cookies, _] = useCookies(["token"]);
   const appDispatch = useAppDispatch();
@@ -63,6 +64,7 @@ const Navbar = () => {
       if (cookies && cookies.token && cookies.token === t) {
         localStorage.removeItem("token");
         appDispatch(logout());
+        appDispatch(clearTeam());
       }
     } catch (error) {
       console.error(error);
@@ -70,7 +72,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 w-[100vw] bg-background">
+    <nav ref={ref} className="sticky top-0 w-[100vw] bg-background h-fit">
       <div className="w-full bg-primary p-2 grid place-items-center text-muted text-xs">
         <span className="flex gap-2">
           <Flag01Icon className="w-4 h-4" />
@@ -78,7 +80,7 @@ const Navbar = () => {
         </span>
       </div>
       <div className="md:w-[65vw] px-4 md:px-0 h-[4rem] mx-auto flex flex-row justify-between items-center">
-        <Link to={'/'}>
+        <Link to={"/"}>
           <img src={APP_LOGO} alt="LOGO" className="h-[1.25rem]" />
         </Link>
         <div className="flex flex-row justify-end items-center gap-4">
@@ -96,10 +98,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          <Badge
-            variant={"default"}
-            className="flex flex-shrink-0 h-[2rem]"
-          >
+          <Badge variant={"default"} className="flex flex-shrink-0 h-[2rem]">
             Ends in 3 days
           </Badge>
           <DropdownMenu>
@@ -169,6 +168,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
+});
 
 export default Navbar;
