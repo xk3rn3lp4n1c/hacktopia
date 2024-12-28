@@ -65,7 +65,7 @@ export default function App() {
               }
             >
               <Route index element={<Teams />} />
-              <Route path=":teamId" element={<TeamDetail />} />
+              <Route path="overview/:teamId" element={<TeamDetail />} />
             </Route>
           </Route>
         ) : (
