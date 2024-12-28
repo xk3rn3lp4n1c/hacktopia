@@ -37,7 +37,7 @@ const CustomInput = forwardRef<
     return (
       <div
         ref={ref}
-        className={`${className} border flex flex-row justify-start items-center focus-within:ring-[2px] focus-within:ring-offset-2 ring-primary rounded-lg`}
+        className={`${className} border flex flex-row justify-start items-center focus-within:ring-[2px] focus-within:ring-offset-2 ring-primary rounded-lg ring-offset-background`}
       >
         <Input
           {...props}

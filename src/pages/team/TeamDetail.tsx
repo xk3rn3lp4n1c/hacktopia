@@ -92,7 +92,7 @@ const TeamDetail = () => {
           }
         })
         .catch(() => {
-          // navigate("/teams");
+          navigate("/teams");
         });
     };
 

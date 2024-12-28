@@ -73,7 +73,7 @@ const Navbar = React.forwardRef<HTMLElement>((props, ref) => {
 
   return (
     <nav ref={ref} className="sticky top-0 w-[100vw] bg-background h-fit">
-      <div className="w-full bg-primary p-2 grid place-items-center text-muted text-xs">
+      <div className="w-full bg-accent p-2 grid place-items-center text-foreground text-xs">
         <span className="flex gap-2">
           <Flag01Icon className="w-4 h-4" />
           Get ready for the next challenge, {userName}!
