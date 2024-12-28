@@ -5,14 +5,12 @@ import axios from "axios";
 
 export const CreateTeam = async ({
   teamName = "",
-  teamCode = "",
   teamMotto = "",
   teamCountry = "",
   teamCaptain = "",
   token = "", // Add token as a parameter
 }: {
   teamName: string;
-  teamCode: string;
   teamMotto: string;
   teamCountry: string;
   teamCaptain: string;
@@ -23,7 +21,6 @@ export const CreateTeam = async ({
       `${APP_API_ENDPOINT_URL}/api/v1/team/create`,
       {
         teamName,
-        teamCode,
         teamMotto,
         teamCountry,
         teamCaptain,

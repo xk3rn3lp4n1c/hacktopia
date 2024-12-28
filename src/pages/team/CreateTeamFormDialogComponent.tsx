@@ -54,9 +54,6 @@ const formSchema = z.object({
   teamName: z.string().min(2, {
     message: "Team name must be at least 2 characters.",
   }),
-  teamCode: z.string().min(2, {
-    message: "Team code must be at least 2 characters.",
-  }),
   teamMotto: z.string().min(2, {
     message: "Team motto must be at least 2 characters.",
   }),
@@ -80,7 +77,6 @@ const CreateTeamFormDialogComponent = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       teamName: "",
-      teamCode: "",
       teamMotto: "",
       teamCountry: "",
       teamCaptain: userName,
@@ -90,7 +86,6 @@ const CreateTeamFormDialogComponent = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await CreateTeam({
       teamName: values.teamName,
-      teamCode: values.teamCode,
       teamCaptain: userName,
       teamMotto: values.teamMotto,
       teamCountry: values.teamCountry,
@@ -249,8 +244,10 @@ const CreateTeamFormDialogComponent = () => {
                                         setHasCountryPicked(true);
                                       }}
                                     >
-                                      <span className="text-muted-foreground">{country.code}</span> - {" "}
-                                      {country.name}
+                                      <span className="text-muted-foreground">
+                                        {country.code}
+                                      </span>{" "}
+                                      - {country.name}
                                       <Tick02Icon
                                         className={cn(
                                           "ml-auto",
@@ -289,27 +286,6 @@ const CreateTeamFormDialogComponent = () => {
                     <FormDescription>
                       This will be displayed on your profile and in the
                       leaderboard.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="teamCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Team Code</FormLabel>
-                    <FormControl>
-                      <CustomInput
-                        {...field}
-                        type="password"
-                        className="w-full"
-                        placeholder="Enter your team code"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      This will be use by others to join your team.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -37,9 +37,8 @@ const Teams = () => {
       listTeams();
     });
 
-    listTeams();
-
     return () => {
+      listTeams();
       socketServer.off("allTeams");
     };
   }, [socketServer]);

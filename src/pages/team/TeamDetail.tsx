@@ -21,8 +21,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Link03Icon, Location01Icon } from "hugeicons-react";
+import { CrownIcon, Link03Icon, Location01Icon } from "hugeicons-react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 
 interface TeamMemberProfile {
   userId: string;
@@ -45,7 +47,6 @@ interface TeamDetails {
   id: number;
   teamId: string;
   teamName: string;
-  teamCode: string;
   teamCaptain: string;
   teamMotto: string;
   teamCountry: string;
@@ -65,7 +66,6 @@ const TeamDetail = () => {
     id: 0,
     teamId: "",
     teamName: "",
-    teamCode: "",
     teamCaptain: "",
     teamMotto: "",
     teamCountry: "",
@@ -76,7 +76,6 @@ const TeamDetail = () => {
   });
 
   useEffect(() => {
-    console.log(teamId);
     const fetchTeamDetails = async () => {
       await GetTeamDetails({
         teamId: teamId || "",
@@ -89,66 +88,108 @@ const TeamDetail = () => {
           }
         })
         .catch(() => {
-          navigate("/teams");
+          // navigate("/teams");
         });
     };
 
-    fetchTeamDetails();
+    return () => {
+      fetchTeamDetails();
+    };
   }, []);
 
   return (
     <div>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/teams">All Teams</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              <span>{teamDetails.teamName}</span>
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <div className="py-10">
-        <div className="space-y-6">
-          <div className="w-full flex justify-between items-start">
-            <Jdenticon size="80" value={teamDetails.teamName} />
-            {currentTeamName === "" && <Button variant="ghost">
-              <Link03Icon size="16" />
-              Request Join
-            </Button>}
-          </div>
-          <h1 className="text-2xl font-bold flex flex-row justify-start items-center gap-4">
-            {teamDetails.teamName}{" "}
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Badge>
-                    {getData().map((country) =>
-                      country.name === teamDetails.teamCountry
-                        ? country.code
-                        : null
+      <TooltipProvider delayDuration={0}>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/teams">
+                  {teamDetails.teamName ? (
+                    "All Teams"
+                  ) : (
+                    <Skeleton className="h-4 w-12" />
+                  )}
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                <span>
+                  {teamDetails.teamName || <Skeleton className="h-4 w-32" />}
+                </span>
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="py-10">
+          <div className="space-y-6">
+            <div className="w-full flex justify-between items-start">
+              {teamDetails.teamName ? (
+                <Jdenticon size="80" value={teamDetails.teamName} />
+              ) : (
+                <Skeleton className="h-20 w-20" />
+              )}
+              {currentTeamName === "" && (
+                <Button variant="ghost">
+                  <Link03Icon size="16" />
+                  Request Join
+                </Button>
+              )}
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold flex flex-row justify-start items-center gap-4">
+                {teamDetails.teamName || <Skeleton className="h-8 w-32" />}{" "}
+                {teamDetails.teamName ? (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge variant={"default"} className="">
+                        {getData().map((country) =>
+                          country.name === teamDetails.teamCountry
+                            ? country.code
+                            : null
+                        )}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" align="start">
+                      <span className="text-xs flex flex-row justify-start items-center gap-2">
+                        <Location01Icon size="14" />
+                        {teamDetails.teamCountry}
+                      </span>
+                    </TooltipContent>
+                  </Tooltip>
+                ) : (
+                  <Skeleton className="h-5 w-7" />
+                )}
+              </h1>
+              <span className="text-muted-foreground text-sm">
+                {teamDetails.teamMotto ? (
+                  teamDetails.teamMotto
+                ) : (
+                  <div className="space-y-2 mt-2">
+                    <Skeleton className="w-full h-4" />
+                    <Skeleton className="w-[50%] h-4" />
+                  </div>
+                )}
+              </span>
+              <Separator className="my-4 bg-primary/5" />
+              <div>
+                <div className="flex flex-row justify-start items-center gap-2 mt-2">
+                  <h2 className="text-muted-foreground text-sm flex justify-start items-center gap-2">
+                    <CrownIcon size="16" />
+                    {teamDetails.teamCaptain ? (
+                      <p>{teamDetails.teamCaptain}</p>
+                    ) : (
+                      <Skeleton className="w-full h-4" />
                     )}
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent side="right" align="start">
-                  <span className="text-xs flex flex-row justify-start items-center gap-2">
-                    <Location01Icon size="14" />
-                    {teamDetails.teamCountry}
-                  </span>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </h1>
-          <span className="text-muted-foreground text-sm">
-            {teamDetails.teamMotto}
-          </span>
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </TooltipProvider>
     </div>
   );
 };
