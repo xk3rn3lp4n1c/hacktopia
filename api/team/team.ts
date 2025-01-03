@@ -148,3 +148,31 @@ export const GetMyTeamDetails = async ({
     throw error;
   }
 };
+
+export const AcceptJoinRequest = async ({
+  requestId = "",
+  teamCaptainUserId = "",
+  token = "",
+}: {
+  requestId: string;
+  teamCaptainUserId: string;
+  token: string;
+}) => {
+  try {
+    const response = await axios.post(
+      `${APP_API_ENDPOINT_URL}/api/v1/team/join/accept`,
+      {
+        requestId,
+        teamCaptainUserId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use the passed token
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
