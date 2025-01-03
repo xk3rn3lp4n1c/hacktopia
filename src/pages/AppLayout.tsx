@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Scroll } from "lucide-react";
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const navRef = useRef<HTMLElement>(null); // Ref for the Navbar
@@ -18,12 +19,12 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="w-[100vw] h-[100vh] overflow-hidden">
       <div className="grid grid-rows-[auto_1fr]">
         <Navbar ref={navRef} />
-        <main
+        <ScrollArea
           className="w-full"
           style={{ height: `calc(100vh - ${navHeight}px)` }}
         >
           {children}
-        </main>
+        </ScrollArea>
       </div>
     </div>
   );
