@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { APP_LOGO } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import {
+  CellsIcon,
   Flag01Icon,
   Logout03Icon,
   RankingIcon,
@@ -41,9 +42,9 @@ const links: Links[] = [
     icon: <UserGroupIcon className="w-4 h-4" />,
   },
   {
-    title: "Challenges",
-    to: "/challenges",
-    icon: <Flag01Icon className="w-4 h-4" />,
+    title: "Events",
+    to: "/events",
+    icon: <CellsIcon className="w-4 h-4" />,
   },
   {
     title: "Leaderboard",
