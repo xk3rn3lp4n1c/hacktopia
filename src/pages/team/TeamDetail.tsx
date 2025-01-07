@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { GetTeamDetails } from "../../../api/team/team";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import { useAppSelector } from "@/redux/hooks";
 import Jdenticon from "react-jdenticon";
 import {
@@ -23,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
   DropdownMenu,
@@ -67,7 +58,6 @@ interface TeamDetails {
 
 const TeamDetail = () => {
   const { teamId } = useParams();
-  const navigate = useNavigate();
   const token = useAppSelector((state) => state.auth.token);
   const currentTeamName = useAppSelector((state) => state.team.teamName);
 
