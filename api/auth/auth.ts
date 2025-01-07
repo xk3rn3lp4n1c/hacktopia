@@ -51,7 +51,7 @@ export const AuthCreateAccount = async ({
 export const ChkUsr = async ({ userName = "" }: { userName: string }) => {
   try {
     const response = await axios.get(
-      `${APP_API_ENDPOINT_URL}/api/v1/auth/chk-usr?userName=${userName}`
+      `${APP_API_ENDPOINT_URL}/api/v1/auth/check-user?userName=${userName}`
     );
     return response.data;
   } catch (error) {
