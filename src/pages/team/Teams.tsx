@@ -1,9 +1,8 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AddTeamIcon, ArrowRight01Icon, Flag01Icon } from "hugeicons-react";
+import { ArrowRight01Icon, Flag01Icon } from "hugeicons-react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 import { ListTeams } from "../../../api/team/team";
 import { useAppSelector } from "@/redux/hooks";
@@ -17,8 +16,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
 import {
@@ -28,29 +25,27 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import CreateTeamFormDialogComponent from "./CreateTeamFormDialogComponent";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import JoinTeamFormDialogComponent from "./JoinTeamFormDialogComponent";
-import MyTeam from "./MyTeam";
 
 const Teams = () => {
   const [teams, setTeams] = React.useState([]);
   const { token } = useAppSelector((state) => state.auth);
+  const teamName = useAppSelector((state) => state.team.teamName);
 
   useEffect(() => {
     const listTeams = async () => {
       await ListTeams({ token }).then((res) => {
-        console.log(res);
         setTeams(res.teams);
       });
     };
 
-    socketServer.on("allTeams", () => {
+    socketServer.on("newTeamAdded", () => {
       listTeams();
     });
 
     return () => {
       listTeams();
-      socketServer.off("allTeams");
+      socketServer.off("newTeamAdded");
     };
   }, [socketServer]);
 
@@ -73,10 +68,12 @@ const Teams = () => {
               Here you can see all the teams in the world
             </p>
           </div>
-          <div className="flex flex-row justify-end items-center gap-2">
-            <JoinTeamFormDialogComponent />
-            <CreateTeamFormDialogComponent />
-          </div>
+          {teamName === "" && (
+            <div className="flex flex-row justify-end items-center gap-2">
+              <JoinTeamFormDialogComponent />
+              <CreateTeamFormDialogComponent />
+            </div>
+          )}
         </div>
       </div>
       <div className="space-y-4 h-full">
@@ -141,7 +138,7 @@ const Teams = () => {
             </div>
           ))
         ) : (
-          <div className="flex flex-col justify-center items-center h-fit">
+          <div className="flex flex-col justify-center items-center h-fit py-20">
             <Flag01Icon className="w-8 h-8 text-red-500 mb-2" />
             <span className="text-muted-foreground text-sm">
               There's no teams yet.

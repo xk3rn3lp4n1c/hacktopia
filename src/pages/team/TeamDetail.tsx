@@ -31,6 +31,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 
 interface TeamMemberProfile {
   userId: string;
@@ -108,24 +109,19 @@ const TeamDetail = () => {
   }, []);
 
   return (
-    <div>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/teams">All Teams</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              <span>
-                {teamDetails.teamName || <Skeleton className="h-4 w-32" />}
-              </span>
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <div className="space-y-6 py-4">
+      <CustomBreadCrumb
+        links={[
+          {
+            name: "All Teams",
+            href: "/teams",
+          },
+          {
+            name: teamDetails.teamName || <Skeleton className="h-4 w-32" />,
+            href: `/team/${teamId}`,
+          },
+        ]}
+      />
       <div>
         <div className="space-y-6">
           <div className="flex flex-row justify-end items-center">
@@ -225,9 +221,7 @@ const TeamDetail = () => {
                     <span className="text-primary text-lg">
                       {teamDetails.teamCapturedFlags}
                     </span>
-                    <span className="text-muted-foreground text-sm">
-                      Captured Flags
-                    </span>
+                    <span className="text-muted-foreground text-sm">Flags</span>
                   </div>
                 ) : (
                   <Skeleton className="w-full h-20" />

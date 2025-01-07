@@ -93,12 +93,8 @@ const CreateTeamFormDialogComponent = () => {
     })
       .then((res) => {
         if (res.code === "TEAM_CREATED") {
-          console.log(res);
           appDispatch(setTeam(res.team.teamName));
           setChkTeam(false);
-
-          socketServer.emit("allTeams");
-
           setOpen(false);
         }
       })

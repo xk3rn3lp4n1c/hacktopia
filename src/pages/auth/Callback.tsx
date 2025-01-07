@@ -25,6 +25,7 @@ const AuthCallback = () => {
           token,
           email: decodedToken.email,
           userName: decodedToken.userName,
+          userId: decodedToken.userId,
         })
       );
       navigate("/"); // Redirect to home or any other page

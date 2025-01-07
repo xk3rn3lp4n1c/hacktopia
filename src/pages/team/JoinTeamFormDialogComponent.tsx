@@ -13,19 +13,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  AddTeamIcon,
-} from "hugeicons-react";
+import { AddTeamIcon } from "hugeicons-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  ChkTeam,
-  JoinTeam,
-  ListTeams,
-} from "../../../api/team/team";
+import { ChkTeam, JoinTeam, ListTeams } from "../../../api/team/team";
 import { cn, socketServer } from "@/lib/utils";
 import { debounce } from "lodash";
 import Jdenticon from "react-jdenticon";
@@ -74,9 +68,11 @@ const JoinTeamFormDialogComponent = () => {
     })
       .then((res) => {
         if (res.code === "JOIN_REQUEST_CREATED") {
-          console.log(res);
           setChkTeam(false);
           setOpen(false);
+          socketServer.emit("joinTeam", {
+            teamId: values.teamId,
+          });
         }
       })
       .catch((error) => {
@@ -92,7 +88,6 @@ const JoinTeamFormDialogComponent = () => {
   useEffect(() => {
     const listTeams = async () => {
       await ListTeams({ token }).then((res) => {
-        console.log(res);
         setTeams(res.teams);
       });
     };
@@ -184,7 +179,7 @@ const JoinTeamFormDialogComponent = () => {
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-full min-w-max p-0"
+                        className="md:w-[350px] min-w-max p-0"
                         align="start"
                         side="bottom"
                       >
@@ -206,9 +201,7 @@ const JoinTeamFormDialogComponent = () => {
                                   }}
                                 >
                                   <div className="grid place-items-center overflow-hidden rounded-full p-0">
-                                    <Jdenticon
-                                      value={team.teamName}
-                                    />
+                                    <Jdenticon value={team.teamName} />
                                   </div>
                                   <div className="flex flex-col">
                                     <span>{team.teamName}</span>
@@ -241,7 +234,7 @@ const JoinTeamFormDialogComponent = () => {
                 variant={"default"}
                 disabled={chkTeam}
               >
-				Request Join
+                Request Join
               </Button>
             </form>
           </Form>

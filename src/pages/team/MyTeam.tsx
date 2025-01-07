@@ -2,8 +2,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { AcceptJoinRequest, GetMyTeamDetails } from "../../../api/team/team";
 import React, { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@radix-ui/react-separator";
-import { CrownIcon, Link03Icon, Notification02Icon, Settings02Icon } from "hugeicons-react";
+import { CrownIcon, Link03Icon, Settings02Icon } from "hugeicons-react";
 import Jdenticon from "react-jdenticon";
 
 import {
@@ -14,10 +13,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { MoreHorizontal, MoreVertical } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MoreVertical } from "lucide-react";
+import { socketServer } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
-import { cn, socketServer } from "@/lib/utils";
+import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 
 const MyTeam = () => {
   const [teamData, setTeamData] = React.useState<any>();
@@ -28,7 +29,6 @@ const MyTeam = () => {
       await GetMyTeamDetails({ userId: userId, token: token }).then((res) => {
         if (res) {
           setTeamData(res);
-          console.log(res);
         }
       });
     };
@@ -39,9 +39,14 @@ const MyTeam = () => {
       fetchData();
     });
 
+    socketServer.on("joinTeam", () => {
+      fetchData();
+    });
+
     return () => {
       fetchData();
       socketServer.off("allTeams");
+      socketServer.off("joinTeam");
     };
   }, [socketServer]);
 
@@ -53,11 +58,20 @@ const MyTeam = () => {
     }).then((res) => {
       console.log(res);
       socketServer.emit("allTeams");
+      socketServer.emit("requestJoinAccepted", res);
     });
   };
 
   return (
-    <div className="px-4 md:px-0 md:w-[65vw] h-full mx-auto py-4">
+    <div className="px-4 md:px-0 md:w-[65vw] h-full mx-auto py-4 space-y-6">
+      <CustomBreadCrumb
+        links={[
+          {
+            name: "My Team",
+            href: "/team",
+          },
+        ]}
+      />
       <div>
         <div className="space-y-6">
           <div className="space-y-4 w-full">
@@ -149,15 +163,17 @@ const MyTeam = () => {
                         })
                       ) : (
                         <div className="space-y-2 p-4">
-                          <span className="text-sm text-muted-foreground">No Join Requests</span>
+                          <span className="text-sm text-muted-foreground">
+                            No Join Requests
+                          </span>
                         </div>
                       )}
                     </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Link
-                  to="/my-team/settings"
-                  className={cn(buttonVariants({ variant: "ghost" }), "grid place-items-center relative h-10 w-10 rounded-full")}
+                  to={`/team/settings`}
+                  className="grid place-items-center relative h-10 w-10 rounded-full"
                 >
                   <Settings02Icon className="h-5 w-5" />
                 </Link>

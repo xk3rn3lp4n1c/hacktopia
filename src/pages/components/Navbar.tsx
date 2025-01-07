@@ -103,8 +103,8 @@ const Navbar = React.forwardRef<HTMLElement>((props, ref) => {
             Ends in 3 days
           </Badge>
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full overflow-hidden border hover:ring-2 ring-primary ring-offset-2 flex-shrink-0">
-              <Jdenticon size="30" value={userName} />
+            <DropdownMenuTrigger className="rounded-full overflow-hidden border hover:ring-2 ring-primary ring-offset-2 flex-shrink-0 p-2">
+              <Jdenticon size="24" value={userName} />
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="end">
               <div className="p-2 flex gap-2">
@@ -148,7 +148,7 @@ const Navbar = React.forwardRef<HTMLElement>((props, ref) => {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
-                  to="/my-team"
+                  to="/team"
                   className="flex flex-row justify-start items-center gap-2"
                 >
                   <UserMultipleIcon className="w-4 h-4" />
