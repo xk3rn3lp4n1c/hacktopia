@@ -74,7 +74,7 @@ export const ChkTeam = async ({
 }) => {
   try {
     const response = await axios.get(
-      `${APP_API_ENDPOINT_URL}/api/v1/team/chk-team?teamName=${teamName}`,
+      `${APP_API_ENDPOINT_URL}/api/v1/team/check-team?teamName=${teamName}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -112,7 +112,7 @@ export const GetTeamDetails = async ({
 }) => {
   try {
     const response = await axios.get(
-      `${APP_API_ENDPOINT_URL}/api/v1/team/teamDetails/?teamId=${teamId}`,
+      `${APP_API_ENDPOINT_URL}/api/v1/team/details/?teamId=${teamId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -135,7 +135,7 @@ export const GetMyTeamDetails = async ({
 }) => {
   try {
     const response = await axios.get(
-      `${APP_API_ENDPOINT_URL}/api/v1/team/myTeam/?userId=${userId}`,
+      `${APP_API_ENDPOINT_URL}/api/v1/team/my-team/?userId=${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -160,7 +160,7 @@ export const AcceptJoinRequest = async ({
 }) => {
   try {
     const response = await axios.post(
-      `${APP_API_ENDPOINT_URL}/api/v1/team/join/accept`,
+      `${APP_API_ENDPOINT_URL}/api/v1/team/accept`,
       {
         requestId,
         teamCaptainUserId,
