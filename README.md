@@ -1,6 +1,6 @@
 # Hacktopia Frontend
 
-Welcome to the frontend repository for Hacktopia, a platform designed to [brief description of what Hacktopia does].
+Welcome to the frontend repository for Hacktopia.
 
 ## Features
 
